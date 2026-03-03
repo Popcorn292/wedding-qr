@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thiệp Cưới</title>
+<title>Wedding Invitation</title>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-body {
-    font-family: 'Segoe UI', sans-serif;
+body{
+    font-family:Segoe UI, sans-serif;
     height:100vh;
     background:url('https://images.unsplash.com/photo-1519741497674-611481863552') center/cover no-repeat;
     display:flex;
@@ -19,21 +19,23 @@ body {
     color:white;
 }
 
-.overlay {
+.overlay{
     background:rgba(0,0,0,0.6);
     padding:40px;
     border-radius:25px;
     text-align:center;
     width:90%;
-    max-width:400px;
+    max-width:420px;
     backdrop-filter:blur(8px);
+    animation:fadeIn 2s ease;
 }
 
-.overlay h2 {
+.overlay h2{
     margin-bottom:25px;
+    font-size:26px;
 }
 
-.button {
+.button{
     display:block;
     margin:15px auto;
     padding:14px;
@@ -42,15 +44,21 @@ body {
     text-decoration:none;
     border-radius:30px;
     transition:0.3s;
+    font-weight:bold;
 }
 
-.button:hover {
+.button:hover{
     background:#b8962e;
     transform:scale(1.05);
 }
 
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
 /* Hoa rơi */
-.flower {
+.flower{
     position:fixed;
     top:-10px;
     width:15px;
@@ -61,10 +69,8 @@ body {
     animation:fall linear infinite;
 }
 
-@keyframes fall {
-    to {
-        transform:translateY(110vh);
-    }
+@keyframes fall{
+    to{transform:translateY(110vh);}
 }
 </style>
 </head>
@@ -81,33 +87,45 @@ body {
 </div>
 
 <!-- NHẠC -->
-<audio id="bgMusic" autoplay loop playsinline>
+<audio id="bgMusic" autoplay loop playsinline muted>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-window.addEventListener("load", function() {
-    const music = document.getElementById("bgMusic");
+const music = document.getElementById("bgMusic");
 
-    music.play().catch(() => {
-        console.log("Autoplay bị chặn bởi trình duyệt");
+/* Bước 1: cố autoplay muted */
+window.addEventListener("load", () => {
+    music.play().then(() => {
+        setTimeout(() => {
+            music.muted = false; // tự bật tiếng sau 1s
+        }, 1000);
+    }).catch(() => {
+        console.log("Autoplay bị chặn");
     });
 });
 
-/* Hoa rơi */
-function createFlower() {
-    const flower = document.createElement("div");
-    flower.classList.add("flower");
-    flower.style.left = Math.random() * 100 + "vw";
-    flower.style.animationDuration = (Math.random() * 5 + 5) + "s";
-    document.body.appendChild(flower);
-
-    setTimeout(() => {
-        flower.remove();
-    }, 10000);
+/* Bước 2: nếu bị chặn thì kích hoạt khi người dùng chạm */
+function activateMusic(){
+    music.muted = false;
+    music.play();
+    document.removeEventListener("click", activateMusic);
+    document.removeEventListener("touchstart", activateMusic);
 }
 
-setInterval(createFlower, 500);
+document.addEventListener("click", activateMusic);
+document.addEventListener("touchstart", activateMusic);
+
+/* Hoa rơi */
+function createFlower(){
+    const flower=document.createElement("div");
+    flower.classList.add("flower");
+    flower.style.left=Math.random()*100+"vw";
+    flower.style.animationDuration=(Math.random()*5+5)+"s";
+    document.body.appendChild(flower);
+    setTimeout(()=>{flower.remove();},10000);
+}
+setInterval(createFlower,500);
 </script>
 
 </body>
