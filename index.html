@@ -128,9 +128,20 @@ body {
 </div>
 
 <!-- NHẠC -->
-<audio id="bgMusic" loop>
+<audio id="bgMusic" autoplay loop playsinline muted>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
+
+<script>
+window.addEventListener("load", function() {
+    const music = document.getElementById("bgMusic");
+    music.play().then(() => {
+        setTimeout(() => {
+            music.muted = false;
+        }, 1000);
+    });
+});
+</script>
 
 <script>
 const intro = document.getElementById("intro");
