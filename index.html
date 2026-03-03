@@ -3,196 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wedding Luxury</title>
+<title>The Love Saga</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-
 body{
-    height:100vh;
-    overflow:hidden;
-    font-family:'Montserrat',sans-serif;
+    background:black;
     color:white;
+    font-family:'Montserrat',sans-serif;
+    overflow-x:hidden;
 }
 
-/* Background hoàng hôn */
-.background{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:
-        linear-gradient(to top, rgba(0,0,0,0.7), rgba(255,180,80,0.3)),
-        url('https://images.unsplash.com/photo-1505236731923-73c43e8a3b78') center/cover no-repeat;
-    animation:zoom 20s ease-in-out infinite alternate;
-}
-
-@keyframes zoom{
-    from{transform:scale(1);}
-    to{transform:scale(1.1);}
-}
-
-/* Nội dung */
-.content{
-    position:relative;
-    z-index:2;
-    height:100%;
+/* Section full màn hình */
+section{
+    height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    flex-direction:column;
     text-align:center;
-    backdrop-filter: blur(3px);
+    padding:30px;
+    position:relative;
 }
 
-/* Tên */
-.names{
-    font-family:'Playfair Display',serif;
-    font-size:42px;
-    letter-spacing:2px;
+/* Scene 1 */
+.scene1{
+    background:black;
+}
+
+.scene1 h1{
+    font-family:'Cinzel',serif;
+    font-size:32px;
     opacity:0;
     animation:fadeIn 3s forwards 1s;
 }
 
-.date{
-    margin-top:15px;
-    font-size:18px;
+/* Scene 2 */
+.scene2{
+    background:linear-gradient(to bottom, black, #2c0000);
+}
+
+.scene2 h1{
+    font-size:40px;
+    color:#ffcc66;
+    animation:glow 2s infinite alternate;
+}
+
+/* Scene 3 */
+.scene3{
+    background:linear-gradient(to bottom, #000000, #111111);
+}
+
+.timeline{
+    max-width:400px;
+}
+
+.timeline p{
+    margin:20px 0;
     opacity:0;
-    animation:fadeIn 3s forwards 2s;
+    animation:fadeIn 2s forwards;
 }
 
-.buttons{
-    margin-top:40px;
-    opacity:0;
-    animation:fadeIn 3s forwards 3s;
+.timeline p:nth-child(1){animation-delay:1s;}
+.timeline p:nth-child(2){animation-delay:2s;}
+.timeline p:nth-child(3){animation-delay:3s;}
+.timeline p:nth-child(4){animation-delay:4s;}
+
+/* Scene 4 */
+.scene4{
+    background:radial-gradient(circle, #ffcc66, black);
 }
 
-.button{
-    display:block;
-    margin:15px auto;
-    padding:14px 35px;
-    border-radius:40px;
-    text-decoration:none;
-    background:rgba(255,215,120,0.9);
-    color:black;
-    font-weight:500;
-    transition:0.4s;
+.scene4 h1{
+    font-size:42px;
+    font-family:'Cinzel',serif;
 }
 
-.button:hover{
-    background:white;
-    transform:scale(1.05);
+/* Scene 5 */
+.scene5{
+    background:black;
 }
 
-/* Fade animation */
+.names{
+    font-size:48px;
+    font-family:'Cinzel',serif;
+    animation:glow 2s infinite alternate;
+}
+
 @keyframes fadeIn{
     to{opacity:1;}
 }
 
-/* Music icon */
-.music-toggle{
-    position:fixed;
-    top:20px;
-    right:20px;
-    font-size:22px;
-    cursor:pointer;
-    z-index:3;
-}
-
-/* Ánh sáng lấp lánh */
-.sparkle{
-    position:fixed;
-    width:6px;
-    height:6px;
-    background:white;
-    border-radius:50%;
-    opacity:0.8;
-    animation:fall linear infinite;
-}
-
-@keyframes fall{
-    to{transform:translateY(110vh);}
+@keyframes glow{
+    from{text-shadow:0 0 10px #ffcc66;}
+    to{text-shadow:0 0 25px #ffcc66;}
 }
 </style>
 </head>
 
 <body>
 
-<div class="background"></div>
+<section class="scene1">
+    <h1>In a world where nothing was planned...</h1>
+</section>
 
-<div class="content">
-    <div class="names">ANH & EM</div>
-    <div class="date">24 . 12 . 2026</div>
+<section class="scene2">
+    <h1>Two souls collided.</h1>
+</section>
 
-    <div class="buttons">
-        <a class="button" href="LINK_CANVA" target="_blank">Xem Thiệp</a>
-        <a class="button" href="LINK_ALBUM" target="_blank">Album Ảnh</a>
-        <a class="button" href="LINK_DRIVE_UPLOAD" target="_blank">Gửi Ảnh</a>
+<section class="scene3">
+    <div class="timeline">
+        <p>The First Meeting</p>
+        <p>The First Fight</p>
+        <p>The Forgiveness</p>
+        <p>The Proposal</p>
     </div>
-</div>
+</section>
 
-<div class="music-toggle" id="musicToggle">🔊</div>
+<section class="scene4">
+    <h1>And then... She said YES.</h1>
+</section>
 
-<audio id="bgMusic" autoplay loop muted playsinline>
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-const music=document.getElementById("bgMusic");
-const toggle=document.getElementById("musicToggle");
-
-/* Autoplay + fade in */
-window.addEventListener("load",()=>{
-    music.volume=0;
-    music.play().then(()=>{
-        setTimeout(()=>fadeIn(),1500);
-    }).catch(()=>{});
-});
-
-function fadeIn(){
-    music.muted=false;
-    let v=0;
-    const fade=setInterval(()=>{
-        if(v<1){
-            v+=0.05;
-            music.volume=v;
-        }else clearInterval(fade);
-    },200);
-}
-
-/* Kích hoạt nếu bị chặn */
-function activate(){
-    music.muted=false;
-    music.play();
-    fadeIn();
-    document.removeEventListener("click",activate);
-}
-document.addEventListener("click",activate);
-
-/* Toggle */
-toggle.addEventListener("click",()=>{
-    if(music.paused){
-        music.play();
-        toggle.innerHTML="🔊";
-    }else{
-        music.pause();
-        toggle.innerHTML="🔈";
-    }
-});
-
-/* Sparkle */
-function createSparkle(){
-    const s=document.createElement("div");
-    s.classList.add("sparkle");
-    s.style.left=Math.random()*100+"vw";
-    s.style.top="-10px";
-    s.style.animationDuration=(Math.random()*4+4)+"s";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),8000);
-}
-setInterval(createSparkle,300);
-</script>
+<section class="scene5">
+    <div class="names">ANH & EM</div>
+</section>
 
 </body>
 </html>
