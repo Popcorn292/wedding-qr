@@ -75,6 +75,18 @@ h1 {
 <audio autoplay loop playsinline>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
+    <script>
+window.addEventListener('load', function() {
+    const music = document.querySelector('audio');
+    const playPromise = music.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            music.muted = false;
+            music.play();
+        });
+    }
+});
+</script>
 
 <script>
 var music = document.getElementById("bgMusic");
