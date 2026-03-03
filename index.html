@@ -3,56 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wedding Invitation</title>
+<title>Wedding Luxury</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    font-family: 'Segoe UI', sans-serif;
     height:100vh;
-    background:url('https://images.unsplash.com/photo-1519741497674-611481863552') center/cover no-repeat;
+    overflow:hidden;
+    font-family:'Montserrat',sans-serif;
+    color:white;
+}
+
+/* Background hoàng hôn */
+.background{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:
+        linear-gradient(to top, rgba(0,0,0,0.7), rgba(255,180,80,0.3)),
+        url('https://images.unsplash.com/photo-1505236731923-73c43e8a3b78') center/cover no-repeat;
+    animation:zoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes zoom{
+    from{transform:scale(1);}
+    to{transform:scale(1.1);}
+}
+
+/* Nội dung */
+.content{
+    position:relative;
+    z-index:2;
+    height:100%;
     display:flex;
     justify-content:center;
     align-items:center;
-    overflow:hidden;
-    color:white;
-}
-
-/* Overlay */
-.overlay{
-    background:rgba(0,0,0,0.6);
-    padding:45px;
-    border-radius:30px;
+    flex-direction:column;
     text-align:center;
-    width:90%;
-    max-width:420px;
-    backdrop-filter:blur(10px);
-    animation:fadeIn 2s ease;
+    backdrop-filter: blur(3px);
 }
 
-.overlay h2{
-    margin-bottom:25px;
-    font-size:28px;
-    letter-spacing:1px;
+/* Tên */
+.names{
+    font-family:'Playfair Display',serif;
+    font-size:42px;
+    letter-spacing:2px;
+    opacity:0;
+    animation:fadeIn 3s forwards 1s;
 }
 
-/* Button */
+.date{
+    margin-top:15px;
+    font-size:18px;
+    opacity:0;
+    animation:fadeIn 3s forwards 2s;
+}
+
+.buttons{
+    margin-top:40px;
+    opacity:0;
+    animation:fadeIn 3s forwards 3s;
+}
+
 .button{
     display:block;
     margin:15px auto;
-    padding:15px;
-    background:#d4af37;
-    color:white;
-    text-decoration:none;
+    padding:14px 35px;
     border-radius:40px;
-    transition:0.3s;
-    font-weight:bold;
+    text-decoration:none;
+    background:rgba(255,215,120,0.9);
+    color:black;
+    font-weight:500;
+    transition:0.4s;
 }
 
 .button:hover{
-    background:#b8962e;
+    background:white;
     transform:scale(1.05);
+}
+
+/* Fade animation */
+@keyframes fadeIn{
+    to{opacity:1;}
 }
 
 /* Music icon */
@@ -60,33 +95,19 @@ body{
     position:fixed;
     top:20px;
     right:20px;
-    width:45px;
-    height:45px;
-    border-radius:50%;
-    background:rgba(0,0,0,0.6);
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    font-size:22px;
     cursor:pointer;
-    font-size:20px;
-    backdrop-filter:blur(6px);
+    z-index:3;
 }
 
-/* Fade animation */
-@keyframes fadeIn{
-    from{opacity:0;transform:translateY(20px);}
-    to{opacity:1;transform:translateY(0);}
-}
-
-/* Falling petals */
-.flower{
+/* Ánh sáng lấp lánh */
+.sparkle{
     position:fixed;
-    top:-10px;
-    width:14px;
-    height:14px;
-    background:pink;
+    width:6px;
+    height:6px;
+    background:white;
     border-radius:50%;
-    opacity:0.7;
+    opacity:0.8;
     animation:fall linear infinite;
 }
 
@@ -98,13 +119,17 @@ body{
 
 <body>
 
-<div class="overlay">
-    <h2>💍 Wedding Invitation 💍</h2>
+<div class="background"></div>
 
-    <a class="button" href="LINK_CANVA" target="_blank">📩 Xem Thiệp Cưới</a>
-    <a class="button" href="LINK_ALBUM" target="_blank">📷 Album Ảnh</a>
-    <a class="button" href="LINK_PHOTOBOOTH" target="_blank">🎉 Photobooth</a>
-    <a class="button" href="LINK_DRIVE_UPLOAD" target="_blank">📤 Gửi Ảnh Lên Drive</a>
+<div class="content">
+    <div class="names">ANH & EM</div>
+    <div class="date">24 . 12 . 2026</div>
+
+    <div class="buttons">
+        <a class="button" href="LINK_CANVA" target="_blank">Xem Thiệp</a>
+        <a class="button" href="LINK_ALBUM" target="_blank">Album Ảnh</a>
+        <a class="button" href="LINK_DRIVE_UPLOAD" target="_blank">Gửi Ảnh</a>
+    </div>
 </div>
 
 <div class="music-toggle" id="musicToggle">🔊</div>
@@ -114,46 +139,38 @@ body{
 </audio>
 
 <script>
-const music = document.getElementById("bgMusic");
-const toggle = document.getElementById("musicToggle");
+const music=document.getElementById("bgMusic");
+const toggle=document.getElementById("musicToggle");
 
-/* Autoplay muted trước */
-window.addEventListener("load", () => {
-    music.volume = 0;
-    music.play().then(() => {
-        setTimeout(() => {
-            fadeInMusic();
-        },1500);
+/* Autoplay + fade in */
+window.addEventListener("load",()=>{
+    music.volume=0;
+    music.play().then(()=>{
+        setTimeout(()=>fadeIn(),1500);
     }).catch(()=>{});
 });
 
-/* Fade in âm lượng */
-function fadeInMusic(){
-    music.muted = false;
-    let vol = 0;
-    const fade = setInterval(()=>{
-        if(vol < 1){
-            vol += 0.05;
-            music.volume = vol;
-        }else{
-            clearInterval(fade);
-        }
+function fadeIn(){
+    music.muted=false;
+    let v=0;
+    const fade=setInterval(()=>{
+        if(v<1){
+            v+=0.05;
+            music.volume=v;
+        }else clearInterval(fade);
     },200);
 }
 
 /* Kích hoạt nếu bị chặn */
 function activate(){
-    music.muted = false;
+    music.muted=false;
     music.play();
-    fadeInMusic();
+    fadeIn();
     document.removeEventListener("click",activate);
-    document.removeEventListener("scroll",activate);
 }
-
 document.addEventListener("click",activate);
-document.addEventListener("scroll",activate);
 
-/* Toggle bật/tắt */
+/* Toggle */
 toggle.addEventListener("click",()=>{
     if(music.paused){
         music.play();
@@ -164,16 +181,17 @@ toggle.addEventListener("click",()=>{
     }
 });
 
-/* Petals */
-function createFlower(){
-    const flower=document.createElement("div");
-    flower.classList.add("flower");
-    flower.style.left=Math.random()*100+"vw";
-    flower.style.animationDuration=(Math.random()*5+5)+"s";
-    document.body.appendChild(flower);
-    setTimeout(()=>{flower.remove();},10000);
+/* Sparkle */
+function createSparkle(){
+    const s=document.createElement("div");
+    s.classList.add("sparkle");
+    s.style.left=Math.random()*100+"vw";
+    s.style.top="-10px";
+    s.style.animationDuration=(Math.random()*4+4)+"s";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),8000);
 }
-setInterval(createFlower,500);
+setInterval(createSparkle,300);
 </script>
 
 </body>
