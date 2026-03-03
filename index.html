@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Love Saga</title>
+<title>The Final Chapter</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -16,118 +16,137 @@ body{
     overflow-x:hidden;
 }
 
-/* Section full màn hình */
+/* Fullscreen scenes */
 section{
     height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     text-align:center;
-    padding:30px;
+    padding:40px;
     position:relative;
 }
 
-/* Scene 1 */
-.scene1{
-    background:black;
-}
-
-.scene1 h1{
+h1{
     font-family:'Cinzel',serif;
-    font-size:32px;
+    font-size:38px;
+    letter-spacing:2px;
+}
+
+/* Scene backgrounds */
+.scene1{background:black;}
+.scene2{background:linear-gradient(to bottom,#000,#200000);}
+.scene3{background:black;}
+.scene4{background:radial-gradient(circle,#ffcc66,black);}
+.scene5{background:black;}
+
+/* Fade */
+.fade{
     opacity:0;
-    animation:fadeIn 3s forwards 1s;
+    transform:translateY(20px);
+    transition:all 2s ease;
 }
 
-/* Scene 2 */
-.scene2{
-    background:linear-gradient(to bottom, black, #2c0000);
+.show{
+    opacity:1;
+    transform:translateY(0);
 }
 
-.scene2 h1{
-    font-size:40px;
+/* Flash effect */
+.flash{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:white;
+    top:0;
+    left:0;
+    opacity:0;
+    pointer-events:none;
+}
+
+.names{
+    font-size:50px;
     color:#ffcc66;
     animation:glow 2s infinite alternate;
 }
 
-/* Scene 3 */
-.scene3{
-    background:linear-gradient(to bottom, #000000, #111111);
-}
-
-.timeline{
-    max-width:400px;
-}
-
-.timeline p{
-    margin:20px 0;
-    opacity:0;
-    animation:fadeIn 2s forwards;
-}
-
-.timeline p:nth-child(1){animation-delay:1s;}
-.timeline p:nth-child(2){animation-delay:2s;}
-.timeline p:nth-child(3){animation-delay:3s;}
-.timeline p:nth-child(4){animation-delay:4s;}
-
-/* Scene 4 */
-.scene4{
-    background:radial-gradient(circle, #ffcc66, black);
-}
-
-.scene4 h1{
-    font-size:42px;
-    font-family:'Cinzel',serif;
-}
-
-/* Scene 5 */
-.scene5{
-    background:black;
-}
-
-.names{
-    font-size:48px;
-    font-family:'Cinzel',serif;
-    animation:glow 2s infinite alternate;
-}
-
-@keyframes fadeIn{
-    to{opacity:1;}
-}
-
 @keyframes glow{
     from{text-shadow:0 0 10px #ffcc66;}
-    to{text-shadow:0 0 25px #ffcc66;}
+    to{text-shadow:0 0 30px #ffcc66;}
 }
 </style>
 </head>
 
 <body>
 
+<div class="flash" id="flash"></div>
+
 <section class="scene1">
-    <h1>In a world where nothing was planned...</h1>
+    <h1 class="fade">In a world where love was never predictable...</h1>
 </section>
 
 <section class="scene2">
-    <h1>Two souls collided.</h1>
+    <h1 class="fade">They fought. They doubted. They almost gave up.</h1>
 </section>
 
 <section class="scene3">
-    <div class="timeline">
-        <p>The First Meeting</p>
-        <p>The First Fight</p>
-        <p>The Forgiveness</p>
-        <p>The Proposal</p>
-    </div>
+    <h1 class="fade">But destiny had another plan.</h1>
 </section>
 
 <section class="scene4">
-    <h1>And then... She said YES.</h1>
+    <h1 class="fade">And then... He knelt down.</h1>
 </section>
 
 <section class="scene5">
-    <div class="names">ANH & EM</div>
+    <div class="names fade">ANH & EM</div>
 </section>
+
+<audio id="bgMusic" autoplay loop muted playsinline>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const fades=document.querySelectorAll('.fade');
+const flash=document.getElementById('flash');
+const music=document.getElementById('bgMusic');
+
+/* Scroll reveal */
+window.addEventListener('scroll',()=>{
+    fades.forEach(el=>{
+        const rect=el.getBoundingClientRect();
+        if(rect.top < window.innerHeight - 100){
+            el.classList.add('show');
+        }
+    });
+});
+
+/* Flash when proposal appears */
+window.addEventListener('scroll',()=>{
+    const scene4=document.querySelector('.scene4');
+    const rect=scene4.getBoundingClientRect();
+    if(rect.top < window.innerHeight/2){
+        flash.style.opacity=1;
+        setTimeout(()=>flash.style.opacity=0,200);
+    }
+});
+
+/* Epic music fade in */
+window.addEventListener("load",()=>{
+    music.volume=0;
+    music.play().then(()=>{
+        setTimeout(()=>{
+            music.muted=false;
+            let v=0;
+            const fade=setInterval(()=>{
+                if(v<1){
+                    v+=0.05;
+                    music.volume=v;
+                }else clearInterval(fade);
+            },200);
+        },1500);
+    }).catch(()=>{});
+});
+</script>
 
 </body>
 </html>
