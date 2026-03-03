@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Final Chapter</title>
+<title>Wedding Cinematic Universe</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box}
 body{
     background:black;
     color:white;
@@ -16,7 +16,7 @@ body{
     overflow-x:hidden;
 }
 
-/* Fullscreen scenes */
+/* Section */
 section{
     height:100vh;
     display:flex;
@@ -29,22 +29,11 @@ section{
 
 h1{
     font-family:'Cinzel',serif;
-    font-size:38px;
-    letter-spacing:2px;
-}
-
-/* Scene backgrounds */
-.scene1{background:black;}
-.scene2{background:linear-gradient(to bottom,#000,#200000);}
-.scene3{background:black;}
-.scene4{background:radial-gradient(circle,#ffcc66,black);}
-.scene5{background:black;}
-
-/* Fade */
-.fade{
+    font-size:42px;
+    letter-spacing:3px;
     opacity:0;
-    transform:translateY(20px);
-    transition:all 2s ease;
+    transform:translateY(40px);
+    transition:2s ease;
 }
 
 .show{
@@ -52,7 +41,40 @@ h1{
     transform:translateY(0);
 }
 
-/* Flash effect */
+/* Backgrounds */
+.bg1{background:black;}
+.bg2{background:linear-gradient(to bottom,#000,#2a0000);}
+.bg3{background:black;}
+.bg4{background:radial-gradient(circle,#ffcc66,#000);}
+.bg5{background:black;}
+
+/* Glitch effect */
+.glitch{
+    position:relative;
+}
+.glitch:before,
+.glitch:after{
+    content:attr(data-text);
+    position:absolute;
+    left:0;
+    width:100%;
+}
+.glitch:before{
+    color:red;
+    animation:glitch 0.8s infinite;
+}
+.glitch:after{
+    color:blue;
+    animation:glitch 0.8s infinite reverse;
+}
+
+@keyframes glitch{
+    0%{clip-path:inset(0 0 90% 0)}
+    50%{clip-path:inset(10% 0 50% 0)}
+    100%{clip-path:inset(80% 0 0 0)}
+}
+
+/* Flash */
 .flash{
     position:fixed;
     width:100%;
@@ -64,15 +86,23 @@ h1{
     pointer-events:none;
 }
 
+/* Names */
 .names{
-    font-size:50px;
+    font-size:55px;
     color:#ffcc66;
     animation:glow 2s infinite alternate;
 }
 
 @keyframes glow{
     from{text-shadow:0 0 10px #ffcc66;}
-    to{text-shadow:0 0 30px #ffcc66;}
+    to{text-shadow:0 0 40px #ffcc66;}
+}
+
+/* Countdown */
+#countdown{
+    margin-top:20px;
+    font-size:24px;
+    letter-spacing:2px;
 }
 </style>
 </head>
@@ -81,56 +111,59 @@ h1{
 
 <div class="flash" id="flash"></div>
 
-<section class="scene1">
-    <h1 class="fade">In a world where love was never predictable...</h1>
+<section class="bg1">
+<h1>In a world... where love was never predictable.</h1>
 </section>
 
-<section class="scene2">
-    <h1 class="fade">They fought. They doubted. They almost gave up.</h1>
+<section class="bg2">
+<h1 class="glitch" data-text="They fought. They doubted.">They fought. They doubted.</h1>
 </section>
 
-<section class="scene3">
-    <h1 class="fade">But destiny had another plan.</h1>
+<section class="bg3">
+<h1>They almost lost each other...</h1>
 </section>
 
-<section class="scene4">
-    <h1 class="fade">And then... He knelt down.</h1>
+<section class="bg4">
+<h1>But destiny rewrote their story.</h1>
 </section>
 
-<section class="scene5">
-    <div class="names fade">ANH & EM</div>
+<section class="bg5">
+<div>
+<div class="names">ANH & EM</div>
+<div id="countdown"></div>
+</div>
 </section>
 
 <audio id="bgMusic" autoplay loop muted playsinline>
-    <source src="music.mp3" type="audio/mpeg">
+<source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-const fades=document.querySelectorAll('.fade');
-const flash=document.getElementById('flash');
-const music=document.getElementById('bgMusic');
+const sections=document.querySelectorAll("h1");
+const flash=document.getElementById("flash");
+const music=document.getElementById("bgMusic");
 
-/* Scroll reveal */
-window.addEventListener('scroll',()=>{
-    fades.forEach(el=>{
+/* Reveal on scroll */
+window.addEventListener("scroll",()=>{
+    sections.forEach(el=>{
         const rect=el.getBoundingClientRect();
         if(rect.top < window.innerHeight - 100){
-            el.classList.add('show');
+            el.classList.add("show");
         }
     });
 });
 
-/* Flash when proposal appears */
-window.addEventListener('scroll',()=>{
-    const scene4=document.querySelector('.scene4');
-    const rect=scene4.getBoundingClientRect();
+/* Flash at twist */
+window.addEventListener("scroll",()=>{
+    const bg4=document.querySelector(".bg4");
+    const rect=bg4.getBoundingClientRect();
     if(rect.top < window.innerHeight/2){
         flash.style.opacity=1;
-        setTimeout(()=>flash.style.opacity=0,200);
+        setTimeout(()=>flash.style.opacity=0,150);
     }
 });
 
-/* Epic music fade in */
+/* Music auto fade in */
 window.addEventListener("load",()=>{
     music.volume=0;
     music.play().then(()=>{
@@ -146,6 +179,16 @@ window.addEventListener("load",()=>{
         },1500);
     }).catch(()=>{});
 });
+
+/* Countdown */
+const weddingDate=new Date("Dec 24, 2026 00:00:00").getTime();
+setInterval(()=>{
+    const now=new Date().getTime();
+    const distance=weddingDate-now;
+    const days=Math.floor(distance/(1000*60*60*24));
+    document.getElementById("countdown").innerHTML=
+    "Wedding Day In "+days+" Days";
+},1000);
 </script>
 
 </body>
