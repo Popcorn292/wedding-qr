@@ -9,7 +9,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    font-family:Segoe UI, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     height:100vh;
     background:url('https://images.unsplash.com/photo-1519741497674-611481863552') center/cover no-repeat;
     display:flex;
@@ -19,30 +19,33 @@ body{
     color:white;
 }
 
+/* Overlay */
 .overlay{
     background:rgba(0,0,0,0.6);
-    padding:40px;
-    border-radius:25px;
+    padding:45px;
+    border-radius:30px;
     text-align:center;
     width:90%;
     max-width:420px;
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(10px);
     animation:fadeIn 2s ease;
 }
 
 .overlay h2{
     margin-bottom:25px;
-    font-size:26px;
+    font-size:28px;
+    letter-spacing:1px;
 }
 
+/* Button */
 .button{
     display:block;
     margin:15px auto;
-    padding:14px;
+    padding:15px;
     background:#d4af37;
     color:white;
     text-decoration:none;
-    border-radius:30px;
+    border-radius:40px;
     transition:0.3s;
     font-weight:bold;
 }
@@ -52,17 +55,35 @@ body{
     transform:scale(1.05);
 }
 
+/* Music icon */
+.music-toggle{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    font-size:20px;
+    backdrop-filter:blur(6px);
+}
+
+/* Fade animation */
 @keyframes fadeIn{
     from{opacity:0;transform:translateY(20px);}
     to{opacity:1;transform:translateY(0);}
 }
 
-/* Hoa rơi */
+/* Falling petals */
 .flower{
     position:fixed;
     top:-10px;
-    width:15px;
-    height:15px;
+    width:14px;
+    height:14px;
     background:pink;
     border-radius:50%;
     opacity:0.7;
@@ -86,37 +107,64 @@ body{
     <a class="button" href="LINK_DRIVE_UPLOAD" target="_blank">📤 Gửi Ảnh Lên Drive</a>
 </div>
 
-<!-- NHẠC -->
-<audio id="bgMusic" autoplay loop playsinline muted>
+<div class="music-toggle" id="musicToggle">🔊</div>
+
+<audio id="bgMusic" autoplay loop muted playsinline>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const music = document.getElementById("bgMusic");
+const toggle = document.getElementById("musicToggle");
 
-/* Bước 1: cố autoplay muted */
+/* Autoplay muted trước */
 window.addEventListener("load", () => {
+    music.volume = 0;
     music.play().then(() => {
         setTimeout(() => {
-            music.muted = false; // tự bật tiếng sau 1s
-        }, 1000);
-    }).catch(() => {
-        console.log("Autoplay bị chặn");
-    });
+            fadeInMusic();
+        },1500);
+    }).catch(()=>{});
 });
 
-/* Bước 2: nếu bị chặn thì kích hoạt khi người dùng chạm */
-function activateMusic(){
+/* Fade in âm lượng */
+function fadeInMusic(){
     music.muted = false;
-    music.play();
-    document.removeEventListener("click", activateMusic);
-    document.removeEventListener("touchstart", activateMusic);
+    let vol = 0;
+    const fade = setInterval(()=>{
+        if(vol < 1){
+            vol += 0.05;
+            music.volume = vol;
+        }else{
+            clearInterval(fade);
+        }
+    },200);
 }
 
-document.addEventListener("click", activateMusic);
-document.addEventListener("touchstart", activateMusic);
+/* Kích hoạt nếu bị chặn */
+function activate(){
+    music.muted = false;
+    music.play();
+    fadeInMusic();
+    document.removeEventListener("click",activate);
+    document.removeEventListener("scroll",activate);
+}
 
-/* Hoa rơi */
+document.addEventListener("click",activate);
+document.addEventListener("scroll",activate);
+
+/* Toggle bật/tắt */
+toggle.addEventListener("click",()=>{
+    if(music.paused){
+        music.play();
+        toggle.innerHTML="🔊";
+    }else{
+        music.pause();
+        toggle.innerHTML="🔈";
+    }
+});
+
+/* Petals */
 function createFlower(){
     const flower=document.createElement("div");
     flower.classList.add("flower");
